@@ -1,0 +1,100 @@
+[17:09:38] [INFO] SELECT * FROM evento LIMIT 1
+[17:16:56] [INFO] SELECT * FROM evento LIMIT 1
+[17:17:04] [INFO] SELECT id, usuario FROM usuarios WHERE usuario = 'eve' AND password = '81dc9bdb52d04dc20036dbd8313ed055'
+[17:17:04] [INFO] SELECT * FROM evento LIMIT 1
+[17:17:12] [INFO] SELECT * FROM evento LIMIT 1
+[20:01:54] [INFO] SELECT * FROM evento LIMIT 1
+[20:10:56] [INFO] SELECT * FROM evento LIMIT 1
+[20:10:59] [INFO] SELECT * FROM evento LIMIT 1
+[20:11:06] [INFO] SELECT * FROM evento LIMIT 1
+[20:12:43] [INFO] SELECT id, usuario FROM usuarios WHERE usuario = 'eve' AND password = 'c042f4db68f23406c6cecf84a7ebb0fe'
+[20:12:43] [INFO] SELECT * FROM evento LIMIT 1
+[20:13:07] [INFO] SELECT id, usuario FROM usuarios WHERE usuario = 'facu' AND password = '81dc9bdb52d04dc20036dbd8313ed055'
+[20:13:07] [INFO] SELECT * FROM evento LIMIT 1
+[20:13:23] [INFO] SELECT * 
+        FROM entradas_messi.lugares 
+        WHERE disponible = 1 ORDER BY precio DESC
+[20:13:28] [INFO] SELECT * FROM lugares WHERE id = 10 AND disponible = 1
+[20:13:30] [INFO] SELECT * 
+        FROM entradas_messi.lugares 
+        WHERE disponible = 1 ORDER BY precio DESC
+[20:13:32] [INFO] SELECT * FROM lugares WHERE id = 10 AND disponible = 1
+[20:13:48] [INFO] SELECT * FROM lugares WHERE id = 10 AND disponible = 1
+[20:13:51] [INFO] INSERT INTO reservas (lugar_id, nombre, apellido, dni, email, telefono)
+                    VALUES (0, '', '', '', '', '')
+[20:14:24] [INFO] SELECT reservas.*, lugares.sector, lugares.precio
+                  FROM reservas
+                  INNER JOIN lugares ON reservas.lugar_id = lugares.id
+                  ORDER BY reservas.fecha_reserva DESC
+[20:16:58] [INFO] SELECT reservas.*, lugares.sector, lugares.precio
+                  FROM reservas
+                  INNER JOIN lugares ON reservas.lugar_id = lugares.id
+                  ORDER BY reservas.fecha_reserva DESC
+[20:16:59] [INFO] SELECT * FROM evento LIMIT 1
+[20:17:02] [INFO] SELECT * FROM evento LIMIT 1
+[20:17:06] [INFO] SELECT * 
+        FROM entradas_messi.lugares 
+        WHERE disponible = 1 ORDER BY precio DESC
+[20:17:08] [INFO] SELECT * FROM lugares WHERE id = 9 AND disponible = 1
+[20:17:18] [INFO] SELECT * FROM lugares WHERE id = 9 AND disponible = 1
+[20:17:25] [INFO] SELECT reservas.*, lugares.sector, lugares.precio
+                  FROM reservas
+                  INNER JOIN lugares ON reservas.lugar_id = lugares.id
+                  ORDER BY reservas.fecha_reserva DESC
+[20:17:28] [INFO] SELECT * 
+        FROM entradas_messi.lugares 
+        WHERE disponible = 1 ORDER BY precio DESC
+[20:17:30] [INFO] SELECT * FROM lugares WHERE id = 8 AND disponible = 1
+[21:17:24] [INFO] SELECT * FROM evento LIMIT 1
+[21:17:29] [INFO] SELECT * 
+        FROM entradas_messi.lugares 
+        WHERE disponible = 1 ORDER BY precio DESC
+[21:17:32] [INFO] SELECT * FROM lugares WHERE id = 2 AND disponible = 1
+[21:17:44] [INFO] SELECT * FROM lugares WHERE id = 2 AND disponible = 1
+[21:18:08] [INFO] SELECT * FROM lugares WHERE id = 2 AND disponible = 1
+[21:18:12] [INFO] INSERT INTO reservas (lugar_id, nombre, apellido, dni, email, telefono)
+                    VALUES (0, '', '', '', '', '')
+[21:20:07] [INFO] INSERT INTO reservas (lugar_id, nombre, apellido, dni, email, telefono)
+                    VALUES (0, '', '', '', '', '')
+[21:20:17] [INFO] SELECT * FROM lugares WHERE id = 2 AND disponible = 1
+[21:20:21] [INFO] SELECT reservas.*, lugares.sector, lugares.precio
+                  FROM reservas
+                  INNER JOIN lugares ON reservas.lugar_id = lugares.id
+                  ORDER BY reservas.fecha_reserva DESC
+[21:20:26] [INFO] SELECT * 
+        FROM entradas_messi.lugares 
+        WHERE disponible = 1 ORDER BY precio DESC
+[21:20:32] [INFO] SELECT * FROM evento LIMIT 1
+[21:20:35] [INFO] SELECT * 
+        FROM entradas_messi.lugares 
+        WHERE disponible = 1 ORDER BY precio DESC
+[22:12:48] [INFO] SELECT * FROM lugares WHERE id = 8 AND disponible = 1
+[22:17:04] [INFO] SELECT * FROM lugares WHERE id = 8 AND disponible = 1
+[22:17:13] [INFO] INSERT INTO reservas (lugar_id, nombre, apellido, dni, email, telefono)
+                    VALUES (8, 'Mario', 'lol', '4343434', 'mario@gmail.com', '1123444333')
+[22:17:13] [INFO] UPDATE lugares SET disponible = 0 WHERE id = 8
+[22:17:13] [INFO] SELECT reservas.*, lugares.sector, lugares.precio
+        FROM reservas
+        INNER JOIN lugares ON reservas.lugar_id = lugares.id
+        WHERE reservas.id = 4
+[22:17:18] [INFO] SELECT * FROM evento LIMIT 1
+[22:17:20] [INFO] SELECT reservas.*, lugares.sector, lugares.precio
+                  FROM reservas
+                  INNER JOIN lugares ON reservas.lugar_id = lugares.id
+                  ORDER BY reservas.fecha_reserva DESC
+[22:17:23] [INFO] SELECT * 
+        FROM entradas_messi.lugares 
+        WHERE disponible = 1 ORDER BY precio DESC
+[22:17:27] [INFO] SELECT * FROM lugares WHERE id = 4 AND disponible = 1
+[22:17:34] [INFO] INSERT INTO reservas (lugar_id, nombre, apellido, dni, email, telefono)
+                    VALUES (4, 'Mario', 'lol', '4343434', 'mario@gmail.com', '1123444333')
+[22:17:34] [INFO] UPDATE lugares SET disponible = 0 WHERE id = 4
+[22:17:34] [INFO] SELECT reservas.*, lugares.sector, lugares.precio
+        FROM reservas
+        INNER JOIN lugares ON reservas.lugar_id = lugares.id
+        WHERE reservas.id = 5
+[22:17:36] [INFO] SELECT * FROM evento LIMIT 1
+[22:17:37] [INFO] SELECT reservas.*, lugares.sector, lugares.precio
+                  FROM reservas
+                  INNER JOIN lugares ON reservas.lugar_id = lugares.id
+                  ORDER BY reservas.fecha_reserva DESC
