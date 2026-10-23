@@ -1,0 +1,66 @@
+<div class="w3-content" style="max-width:600px">
+    <div class="w3-panel card-contenido w3-padding-24
+                w3-margin-top w3-card">
+
+        <h2>Crear cuenta</h2>
+
+        {{#error}}
+            <p class="w3-panel w3-pale-red w3-padding">
+                {{error}}
+            </p>
+        {{/error}}
+
+        <form method="post" action="/registro/registrar">
+
+            <div class="w3-section">
+                <label for="nombre_usuario">Nombre de usuario</label>
+                <input class="w3-input w3-border"
+                       type="text"
+                       id="nombre_usuario"
+                       name="nombre_usuario"
+                       maxlength="50"
+                       required>
+            </div>
+
+            <div class="w3-section">
+                <label for="email">Email</label>
+                <input class="w3-input w3-border"
+                       type="email"
+                       id="email"
+                       name="email"
+                       maxlength="150"
+                       required>
+            </div>
+
+            <div class="w3-section">
+                <label for="password">Contraseña</label>
+                <input class="w3-input w3-border"
+                       type="password"
+                       id="password"
+                       name="password"
+                       required>
+            </div>
+
+            <div class="w3-section">
+                <label for="confirmar_password">
+                    Repetir contraseña
+                </label>
+                <input class="w3-input w3-border"
+                       type="password"
+                       id="confirmar_password"
+                       name="confirmar_password"
+                       required>
+            </div>
+
+            <button type="submit"
+                    class="w3-button btn-cancha w3-round
+                           w3-margin-top w3-padding-16">
+                Crear cuenta
+            </button>
+
+        </form>
+
+        <p>¿Ya tenés cuenta? <a href="/">Iniciar sesión</a></p>
+
+    </div>
+</div>

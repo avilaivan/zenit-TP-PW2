@@ -1,0 +1,66 @@
+
+<div class="w3-content" style="max-width:600px">
+    <div class="w3-panel card-contenido w3-padding-24
+                w3-margin-top w3-card">
+
+        <h2>Juego de preguntas y respuestas</h2>
+
+        {{#login_error}}
+            <p class="w3-panel w3-pale-red w3-padding">
+                El email o la contraseña son incorrectos.
+                Intentá nuevamente.
+            </p>
+        {{/login_error}}
+
+        <h3>Iniciar sesión</h3>
+
+        {{#registro_exitoso}}
+            <p class="w3-panel w3-pale-green w3-padding">
+                ¡Tu cuenta fue creada correctamente!
+                Ahora podés iniciar sesión.
+            </p>
+        {{/registro_exitoso}}
+
+        <form method="post" action="/login/login">
+
+            <div class="w3-section">
+                <label for="email"><b>Email</b></label>
+
+                <input
+                        class="w3-input w3-border"
+                        type="email"
+                        id="email"
+                        name="email"
+                        placeholder="Ingresá tu email"
+                        required
+                >
+            </div>
+
+            <div class="w3-section">
+                <label for="password"><b>Contraseña</b></label>
+
+                <input
+                        class="w3-input w3-border"
+                        type="password"
+                        id="password"
+                        name="password"
+                        placeholder="Ingresá tu contraseña"
+                        required
+                >
+            </div>
+
+            <button
+                    type="submit"
+                    class="w3-button btn-cancha w3-round
+                       w3-margin-top w3-padding-16"
+            >
+                Ingresar
+            </button>
+
+        </form>
+
+        <p>¿Todavía no tenés cuenta?</p>
+        <a href="/registro/show">Registrarme</a>
+
+    </div>
+</div>
