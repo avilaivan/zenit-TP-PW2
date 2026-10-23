@@ -12,7 +12,7 @@ deploy_infinityfree:
     - >
       lftp -u "$FTP_USER","$FTP_PASSWORD" "$FTP_HOST"
       -e "set ftp:ssl-allow no;
-      mirror -R --verbose
+      mirror -R --verbose --no-perms
       --exclude-glob .git
       --exclude-glob .gitlab-ci.yml
       --exclude-glob config/config.ini
