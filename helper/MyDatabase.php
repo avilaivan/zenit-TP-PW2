@@ -34,4 +34,22 @@ class MyDatabase
     {
         return $this->conexion->lastInsertId();
     }
+
+
+    public function queryOnePrepared(string $sql, array $params)
+    {
+        $statement = $this->conexion->prepare($sql);
+        $statement->execute($params);
+
+        $fila = $statement->fetch(PDO::FETCH_ASSOC);
+
+        return $fila === false ? null : $fila;
+    }
+
+    public function executePrepared(string $sql, array $params)
+    {
+        $statement = $this->conexion->prepare($sql);
+        return $statement->execute($params);
+    }
+
 }

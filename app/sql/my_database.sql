@@ -4,13 +4,17 @@
 CREATE DATABASE IF NOT EXISTS my_database CHARACTER SET utf8mb4;
 USE my_database;
 
+
 CREATE TABLE usuarios (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    usuario VARCHAR(50) NOT NULL UNIQUE,
-    password VARCHAR(32) NOT NULL
+                          id INT AUTO_INCREMENT PRIMARY KEY,
+                          nombre_usuario VARCHAR(50) NOT NULL,
+                          email VARCHAR(150) NOT NULL UNIQUE,
+                          password VARCHAR(255) NOT NULL,
+                          fecha_registro TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-INSERT INTO usuarios (usuario, password) VALUES
-('facu', MD5('1234'));
+/*
+INSERT INTO usuarios (nombre_usuario, password) VALUES
+('facu', MD5('1234'));*/
 
 

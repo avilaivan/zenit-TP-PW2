@@ -2,11 +2,10 @@
 
 namespace app\controller;
 
-use Request;
+use Redirect;
 
 class HomeController
 {
-
     private $render;
 
     public function __construct($render)
@@ -16,8 +15,18 @@ class HomeController
 
     public function show()
     {
-        //$this->render->renderiza("home", []);
-        echo "Hola";
-    }
+        if (!isset($_SESSION['usuario_id'])) {
+            Redirect::to('/');
+            return;
+        }
 
+        $datos = [
+            'nombre_usuario' => $_SESSION['usuario'],
+            'email' => $_SESSION['usuario_email'],
+            'puntaje' => 0
+        ];
+
+        $this->render->renderiza('home', $datos);
+    }
 }
+

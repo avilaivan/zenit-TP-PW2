@@ -1,6 +1,7 @@
 <?php
 
 namespace app\model;
+
 class LoginModel
 {
     private $database;
@@ -10,13 +11,28 @@ class LoginModel
         $this->database = $database;
     }
 
-    public function autenticar($usuario, $password)
+    public function autenticar($email, $password)
     {
-        $passwordHash = md5($password);
+        $sql = "SELECT id, nombre_usuario, email, password
+                FROM usuarios
+                WHERE email = ?";
 
-        // A propósito sin prepared statements: lo arreglamos en la clase de refactor
-        $sql = "SELECT id, usuario FROM usuarios WHERE usuario = '$usuario' AND password = '$passwordHash'";
+        $usuario = $this->database->queryOnePrepared(
+            $sql,
+            [$email]
+        );
 
-        return $this->database->queryOne($sql);
+        if ($usuario === null) {
+            return null;
+        }
+
+        if (!password_verify($password, $usuario['password'])) {
+            return null;
+        }
+
+        unset($usuario['password']);
+
+        return $usuario;
     }
 }
+

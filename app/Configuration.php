@@ -4,15 +4,12 @@ namespace app;
 
 use app\controller\HomeController;
 use app\controller\LoginController;
-use app\controller\LugaresController;
-use app\controller\ReservaController;
-use app\model\EventoModel;
 use app\model\LoginModel;
-use app\model\LugaresModel;
-use app\model\ReservaModel;
 use MustacheRender;
 use MyDatabase;
 use Router;
+use app\controller\RegistroController;
+use app\model\RegistroModel;
 
 require_once("helper/Autoloader.php");
 
@@ -36,10 +33,18 @@ class Configuration
     public function getLoginController()
     {
         return new LoginController(
-            $this->getLoginModel()
+            $this->getLoginModel(),
+            $this->getRender()
         );
     }
 
+    public function getRegistroController()
+    {
+        return new RegistroController(
+            $this->getRegistroModel(),
+            $this->getRender()
+        );
+    }
 
 
     private function getDatabase()
@@ -67,8 +72,15 @@ class Configuration
         );
     }
 
+    private function getRegistroModel()
+    {
+        return new RegistroModel(
+            $this->getDatabase()
+        );
+    }
+
     public function getRouter()
     {
-        return new Router($this, "home", "show");
+        return new Router($this, "login", "show");
     }
 }
