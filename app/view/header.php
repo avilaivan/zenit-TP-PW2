@@ -65,10 +65,6 @@
 </div>
 
 <div class="w3-container header-evento w3-padding-32 w3-center">
-    <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Lionel_Messi_WC2022.jpg?width=220"
-         alt="Lionel Messi con la camiseta de Argentina"
-         class="w3-round w3-margin-bottom"
-         style="max-width:220px; border:4px solid var(--dorado);">
-    <h1>⚽ Partido Despedida de Lionel Messi 🐐</h1>
-    <p class="w3-large" style="color: white;">Gracias, Leo.</p>
+
+    <h1>TP Programacion Web II</h1>
 </div>
