@@ -1,237 +1,69 @@
-<div class="w3-content" style="max-width:800px">
-    <div class="w3-panel card-contenido w3-padding-24
-                w3-margin-top w3-card">
+<section class="auth auth-registro">
+    {{> partials/auth-marca}}
 
-        <h2>Juego de preguntas y respuestas</h2>
-        <h3>Crear cuenta</h3>
+    <div class="auth-panel">
+        <div class="card auth-card">
+            <p class="sobretitulo">Nueva cuenta</p>
+            <h1 class="titulo">Crear cuenta</h1>
 
-        {{#error}}
-            <p class="w3-panel w3-pale-red w3-padding">
-                {{error}}
-            </p>
-        {{/error}}
+            {{#error}}<p class="alerta alerta-error">{{error}}</p>{{/error}}
 
-        <form method="post" action="/registro/registrar"
-              enctype="multipart/form-data">
+            {{#form}}
+            <form method="post" action="{{base}}/registro/registrar" class="formulario">
 
-            <div class="w3-section">
-                <label for="nombre_completo"><b>Nombre completo</b></label>
-                <input class="w3-input w3-border"
-                       type="text" id="nombre_completo"
-                       name="nombre_completo" maxlength="150"
-                       placeholder="Ingresá tu nombre completo" required>
-            </div>
-
-            <div class="w3-section">
-                <label for="anio_nacimiento"><b>Año de nacimiento</b></label>
-                <input class="w3-input w3-border"
-                       type="number" id="anio_nacimiento"
-                       name="anio_nacimiento" min="1900"
-                       placeholder="Ej. 2000" required>
-            </div>
-
-            <div class="w3-section">
-                <label for="sexo"><b>Sexo</b></label>
-                <select class="w3-select w3-border"
-                        id="sexo" name="sexo" required>
-                    <option value="" disabled selected>
-                        Seleccioná una opción
-                    </option>
-                    <option value="femenino">Femenino</option>
-                    <option value="masculino">Masculino</option>
-                    <option value="otro">Otro</option>
-                    <option value="no_informar">Prefiero no informar</option>
-                </select>
-            </div>
-
-            <h4>Ubicación</h4>
-            <p>Hacé clic en el mapa para seleccionar tu ciudad.
-                Podés mover el marcador para ajustar la ubicación.</p>
-
-            <div class="w3-section">
-                <label for="pais"><b>País</b></label>
-                <input class="w3-input w3-border"
-                       type="text" id="pais" name="pais"
-                       placeholder="Se completa al elegir el mapa"
-                       readonly required>
-            </div>
-
-            <div class="w3-section">
-                <label for="ciudad"><b>Ciudad</b></label>
-                <input class="w3-input w3-border"
-                       type="text" id="ciudad" name="ciudad"
-                       placeholder="Se completa al elegir el mapa"
-                       readonly required>
-            </div>
-
-            <div class="w3-section">
-                <div id="mapa"
-                     style="height:400px; width:100%;"
-                     class="w3-border"></div>
-            </div>
-
-            <input type="hidden" id="latitud" name="latitud">
-            <input type="hidden" id="longitud" name="longitud">
-
-            <p id="estado-mapa" aria-live="polite">
-                Seleccioná una ubicación en el mapa.
-            </p>
-
-            <div class="w3-section">
-                <label for="email"><b>Correo electrónico</b></label>
-                <input class="w3-input w3-border"
-                       type="email" id="email" name="email"
-                       maxlength="150"
-                       placeholder="Ingresá tu email" required>
-            </div>
-
-            <div class="w3-section">
-                <label for="password"><b>Contraseña</b></label>
-                <input class="w3-input w3-border"
-                       type="password" id="password" name="password"
-                       minlength="8"
-                       placeholder="Mínimo 8 caracteres" required>
-            </div>
-
-            <div class="w3-section">
-                <label for="confirmar_password">
-                    <b>Repetir contraseña</b>
+                <label class="campo">
+                    <span>Nombre completo <small>(lo podés cambiar cuando quieras)</small></span>
+                    <input type="text" name="nombre_completo" value="{{nombre_completo}}" minlength="3" maxlength="150"
+                           autocomplete="name" placeholder="Nombre y apellido" required autofocus>
                 </label>
-                <input class="w3-input w3-border"
-                       type="password" id="confirmar_password"
-                       name="confirmar_password" minlength="8"
-                       placeholder="Repetí tu contraseña" required>
-            </div>
 
-            <div class="w3-section">
-                <label for="nombre_usuario"><b>Nombre de usuario</b></label>
-                <input class="w3-input w3-border"
-                       type="text" id="nombre_usuario"
-                       name="nombre_usuario" maxlength="50"
-                       placeholder="Elegí un nombre de usuario" required>
-            </div>
+                <label class="campo">
+                    <span>Usuario <small>(único · no se puede cambiar)</small></span>
+                    <input type="text" name="nombre_usuario" value="{{nombre_usuario}}" pattern="[A-Za-z0-9_.]{3,20}"
+                           maxlength="20" autocomplete="username" required>
+                </label>
 
-            <div class="w3-section">
-                <label for="foto_perfil"><b>Foto de perfil</b></label>
-                <input class="w3-input w3-border"
-                       type="file" id="foto_perfil"
-                       name="foto_perfil"
-                       accept="image/jpeg,image/png,image/webp" required>
-                <p class="w3-small">Formatos permitidos: JPG, PNG o WEBP.</p>
-            </div>
+                <label class="campo">
+                    <span>Email <small>(te llega un código para activar la cuenta)</small></span>
+                    <input type="email" name="email" value="{{email}}" maxlength="150" autocomplete="email" required>
+                </label>
 
-            <button type="submit"
-                    class="w3-button btn-cancha w3-round
-                           w3-margin-top w3-padding-16">
-                Crear cuenta
-            </button>
+                <div class="fila-2">
+                    <label class="campo">
+                        <span>Contraseña</span>
+                        <input type="password" name="password" minlength="8" autocomplete="new-password" required>
+                    </label>
+                    <label class="campo">
+                        <span>Repetir</span>
+                        <input type="password" name="confirmar_password" minlength="8" autocomplete="new-password" required>
+                    </label>
+                </div>
 
-        </form>
+                <div class="fila-2">
+                    <label class="campo">
+                        <span>Año de nacimiento</span>
+                        <input type="number" name="anio_nacimiento" value="{{anio_nacimiento}}" min="1900" max="2026" placeholder="2001" required>
+                    </label>
+                    <label class="campo">
+                        <span>Sexo</span>
+                        <select name="sexo" required>
+                            <option value="" disabled {{^sexo}}selected{{/sexo}}>Elegí</option>
+                            <option value="masculino" {{#sexo_masculino}}selected{{/sexo_masculino}}>Masculino</option>
+                            <option value="femenino" {{#sexo_femenino}}selected{{/sexo_femenino}}>Femenino</option>
+                            <option value="no_informa" {{#sexo_no_informa}}selected{{/sexo_no_informa}}>Prefiero no cargarlo</option>
+                        </select>
+                    </label>
+                </div>
 
-        <p class="w3-margin-top">¿Ya tenés una cuenta?</p>
-        <a href="/">Iniciá sesión</a>
+                {{> partials/ubicacion}}
 
+                <button type="submit" class="btn btn-primario btn-bloque">Crear cuenta</button>
+            </form>
+            {{/form}}
+
+            <p class="auth-pie">¿Ya tenés cuenta? <a href="{{base}}/login">Iniciá sesión</a></p>
+        </div>
     </div>
-</div>
+</section>
 
-<link rel="stylesheet"
-      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
-
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const mapa = L.map('mapa').setView([-38.4161, -63.6167], 4);
-
-        L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            maxZoom: 19,
-            attribution: '&copy; OpenStreetMap contributors'
-        }).addTo(mapa);
-
-        let marcador = null;
-
-        const campoPais = document.getElementById('pais');
-        const campoCiudad = document.getElementById('ciudad');
-        const campoLatitud = document.getElementById('latitud');
-        const campoLongitud = document.getElementById('longitud');
-        const estado = document.getElementById('estado-mapa');
-
-        async function actualizarUbicacion(lat, lon) {
-            campoLatitud.value = lat.toFixed(7);
-            campoLongitud.value = lon.toFixed(7);
-            campoPais.value = '';
-            campoCiudad.value = '';
-            estado.textContent = 'Buscando ciudad y país...';
-
-            try {
-                const url = new URL(
-                        'https://nominatim.openstreetmap.org/reverse'
-                );
-
-                url.search = new URLSearchParams({
-                    format: 'jsonv2',
-                    lat: lat,
-                    lon: lon,
-                    'accept-language': 'es'
-                }).toString();
-
-                const respuesta = await fetch(url);
-
-                if (!respuesta.ok) {
-                    throw new Error('No se pudo consultar la ubicación.');
-                }
-
-                const datos = await respuesta.json();
-                const direccion = datos.address || {};
-
-                const ciudad =
-                        direccion.city ||
-                        direccion.town ||
-                        direccion.village ||
-                        direccion.municipality ||
-                        direccion.city_district ||
-                        direccion.county ||
-                        '';
-
-                const pais = direccion.country || '';
-
-                if (!ciudad || !pais) {
-                    estado.textContent =
-                            'No pudimos identificar la ciudad. Probá otro punto.';
-                    return;
-                }
-
-                campoCiudad.value = ciudad;
-                campoPais.value = pais;
-                estado.textContent =
-                        'Ubicación seleccionada: ' + ciudad + ', ' + pais;
-
-            } catch (error) {
-                estado.textContent =
-                        'No se pudo consultar la ubicación. Revisá tu conexión.';
-                console.error(error);
-            }
-        }
-
-        mapa.on('click', function (evento) {
-            const lat = evento.latlng.lat;
-            const lon = evento.latlng.lng;
-
-            if (marcador === null) {
-                marcador = L.marker(evento.latlng, {
-                    draggable: true
-                }).addTo(mapa);
-
-                marcador.on('dragend', function () {
-                    const posicion = marcador.getLatLng();
-                    actualizarUbicacion(posicion.lat, posicion.lng);
-                });
-            } else {
-                marcador.setLatLng(evento.latlng);
-            }
-
-            actualizarUbicacion(lat, lon);
-        });
-    });
-</script>
-```
+{{> partials/scripts-mapa}}

@@ -2,61 +2,68 @@
 
 namespace app\controller;
 
+use app\model\UsuarioModel;
+use app\service\VerificacionService;
+use MustacheRender;
 use Redirect;
 use Request;
+use Session;
 
+/**
+ * Inicio y cierre de sesión.
+ */
 class LoginController
 {
-    private $model;
-    private $render;
-
-    public function __construct($model, $render)
-    {
-        $this->model = $model;
-        $this->render = $render;
+    public function __construct(
+        private MustacheRender $render,
+        private UsuarioModel $usuarios,
+        private VerificacionService $verificacion
+    ) {
     }
 
-    public function show()
+    public function show(): void
     {
-        $this->render->renderiza("login", [
-            "registro_exitoso" => Request::get('registro') === 'ok',
-            "login_error" => Request::get('login_error') === '1'
-        ]);
+        if (Session::estaLogueado()) {
+            Redirect::to('');
+        }
+        $this->render->renderiza('login', ['pantalla_auth' => true]);
     }
 
-    public function login()
+    public function login(): void
     {
-        $email = trim(Request::post('email', ''));
-        $password = Request::post('password', '');
+        $usuarioOEmail = Request::texto('usuario');
+        $password = (string) Request::post('password', '');
+        $usuario = $usuarioOEmail !== '' ? $this->usuarios->buscarParaLogin($usuarioOEmail) : null;
 
-        if ($email === '' || $password === '') {
-            Redirect::to('/?login_error=1');
+        if ($usuario === null || !password_verify($password, $usuario['password'])) {
+            $this->render->renderiza('login', [
+                'pantalla_auth' => true,
+                'error' => 'Usuario o contraseña incorrectos.',
+                'usuario' => $usuarioOEmail,
+            ]);
+            return;
         }
 
-        $usuario = $this->model->autenticar(
-            $email,
-            $password
-        );
-
-        if ($usuario === null) {
-            Redirect::to('/?login_error=1');
+        // Cuenta sin verificar: le mandamos un código nuevo y lo llevamos a validarlo.
+        if (!(int) $usuario['activo']) {
+            Session::set('verificar_id', (int) $usuario['id']);
+            Session::set('ultimo_envio', time());
+            $enviado = $this->verificacion->enviar($usuario, VerificacionService::REGISTRO);
+            Session::flash(
+                $enviado ? 'info' : 'error',
+                $enviado ? 'Tu cuenta todavía no está verificada. Te mandamos un código nuevo al mail.'
+                         : 'Tu cuenta no está verificada y no pudimos enviar el mail. Probá reenviar el código.'
+            );
+            Redirect::to('registro/verificar');
         }
 
-        session_regenerate_id(true);
-
-        $_SESSION['usuario_id'] = $usuario['id'];
-        $_SESSION['usuario'] = $usuario['nombre_usuario'];
-        $_SESSION['usuario_email'] = $usuario['email'];
-
-        Redirect::to('/home/show');
+        Session::iniciar($usuario);
+        Redirect::to(Session::tomarDestino()); // ej: tocó JUGAR sin cuenta → vuelve al juego
     }
 
-    public function logout()
+    public function logout(): void
     {
-        $_SESSION = [];
-        session_destroy();
-
-        Redirect::to('/');
+        Session::cerrar();
+        Redirect::to(''); // vuelve al lobby público
     }
 }
-

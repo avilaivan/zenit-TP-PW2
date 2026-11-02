@@ -1,0 +1,27 @@
+<section class="auth">
+    {{> partials/auth-marca}}
+
+    <div class="auth-panel">
+        <div class="card auth-card auth-centrado">
+            <div class="icono-mail" aria-hidden="true">
+                <svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg>
+            </div>
+            <h1 class="titulo">Revisá tu mail</h1>
+            <p class="texto-secundario">Te mandamos un código de 6 dígitos a <b>{{email_oculto}}</b>. Vence en {{minutos}} minutos. Si no lo ves, revisá spam.</p>
+
+            <form method="post" action="{{base}}/registro/confirmar" class="formulario">
+                <label class="campo">
+                    <span class="sr-only">Código de verificación</span>
+                    {{> partials/input-codigo}}
+                </label>
+                <button type="submit" class="btn btn-primario btn-bloque">Verificar cuenta</button>
+            </form>
+
+            <form method="post" action="{{base}}/registro/reenviar">
+                <button type="submit" class="btn btn-secundario btn-bloque">Reenviar código</button>
+            </form>
+
+            <p class="auth-pie"><a href="{{base}}/login">Volver al inicio de sesión</a></p>
+        </div>
+    </div>
+</section>

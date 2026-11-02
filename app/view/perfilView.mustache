@@ -1,0 +1,123 @@
+{{#perfil}}
+<section class="perfil">
+
+    <!-- ═══ Cabecera estilo Steam ═══ -->
+    <header class="perfil-banner">
+
+        {{#es_propio}}
+        <!-- Menú ⋮ con todas las acciones de la cuenta -->
+        <div class="menu-puntos" data-menu>
+            <button type="button" class="boton-icono boton-puntos" aria-label="Opciones del perfil" aria-haspopup="true" aria-expanded="false" data-menu-boton>
+                <svg viewBox="0 0 24 24"><circle cx="12" cy="5" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="12" cy="19" r="1.6"/></svg>
+            </button>
+            <div class="menu-lista" role="menu" hidden data-menu-lista>
+                <a role="menuitem" href="{{base}}/perfil/editar">✎ Editar perfil</a>
+                <a role="menuitem" href="{{base}}/perfil/editar#password">🔑 Cambiar contraseña</a>
+                <a role="menuitem" href="{{base}}/login/logout">⏻ Cerrar sesión</a>
+                <hr>
+                <a role="menuitem" href="{{base}}/perfil/eliminar" class="menu-peligro">✕ Eliminar cuenta</a>
+            </div>
+        </div>
+        {{/es_propio}}
+
+        <div class="perfil-identidad">
+            <div class="perfil-avatar anillo-{{nivel.color}}">{{> partials/avatar}}</div>
+            <div>
+                <h1 class="perfil-nombre">{{nombre_usuario}}</h1>
+                <p class="perfil-nombre-real">{{nombre_completo}}</p>
+                <p class="perfil-lugar">
+                    {{#bandera}}<img class="bandera" src="{{imagen}}" alt="{{emoji}}" title="{{pais}}">{{/bandera}}
+                    <span>{{ciudad}}, {{pais}}</span>
+                    <span class="texto-secundario">· desde {{miembro_desde}}</span>
+                </p>
+            </div>
+        </div>
+
+        <div class="perfil-nivel">
+            {{#nivel}}
+            <span class="nivel nivel-grande nivel-{{color}}">{{codigo}}</span>
+            <div class="perfil-nivel-texto">
+                <small>Nivel de ranking</small>
+                <b>{{#sin_nivel}}Sin nivel{{/sin_nivel}}{{^sin_nivel}}{{#es_z}}Nivel Z · el tope{{/es_z}}{{^es_z}}Nivel {{codigo}}{{/es_z}}{{/sin_nivel}}</b>
+                <div class="barra"><span style="width: {{progreso}}%"></span></div>
+                <small>{{siguiente}}</small>
+            </div>
+            {{/nivel}}
+        </div>
+    </header>
+
+    <!-- ═══ De dónde es: texto + mapa ═══ -->
+    <div class="card perfil-ubicacion">
+        <div class="perfil-ubicacion-texto">
+            <h2 class="subtitulo">Ubicación</h2>
+            <p class="perfil-lugar">
+                {{#bandera}}<img class="bandera" src="{{imagen}}" alt="{{emoji}}" title="{{pais}}">{{/bandera}}
+                <span><b>{{ciudad}}</b>, {{pais}}</span>
+            </p>
+        </div>
+        {{#mapa}}
+        <div class="mapa mapa-perfil" id="mapa-perfil" data-lat="{{lat}}" data-lon="{{lon}}" data-buscar="{{buscar}}" aria-label="Mapa con la ubicación de {{nombre_usuario}}"></div>
+        {{/mapa}}
+    </div>
+
+    <div class="perfil-grid">
+
+        <!-- Números principales -->
+        <div class="card perfil-stats">
+            <div class="stat stat-elo"><small>Elo</small><b class="numero">{{elo}}</b></div>
+            <div class="stat"><small>Acierto</small><b class="numero">{{acierto}}%</b></div>
+            <div class="stat"><small>Respondidas</small><b class="numero">{{respondidas}}</b></div>
+            <div class="stat"><small>Correctas</small><b class="numero">{{correctas}}</b></div>
+            <div class="stat"><small>Partidas</small><b class="numero">{{partidas_jugadas}}</b></div>
+            <div class="stat"><small>Victorias</small><b class="numero">{{partidas_ganadas}}</b></div>
+        </div>
+
+        <!-- Acierto por categoría (0 a 100 %) -->
+        <div class="card perfil-categorias">
+            <h2 class="subtitulo">Acierto por categoría</h2>
+            {{#categorias}}
+            <div class="cat-fila" style="--color: {{color}}">
+                <span class="cat-emoji">{{emoji}}</span>
+                <span class="cat-nombre">{{nombre}}<small>{{correctas}}/{{respondidas}}</small></span>
+                <span class="barra"><span style="width: {{porcentaje}}%"></span></span>
+                <b class="numero">{{porcentaje}}%</b>
+            </div>
+            {{/categorias}}
+        </div>
+
+        <!-- QR para compartir -->
+        <div class="card perfil-qr">
+            <div class="qr" id="qr" data-url="{{url_publica}}"></div>
+            <div>
+                <h2 class="subtitulo">Compartí tu perfil</h2>
+                <p class="texto-secundario">Escaneá el código para abrir este perfil.</p>
+                <button type="button" class="btn btn-secundario btn-chico" id="btn-copiar" data-url="{{url_publica}}">Copiar enlace</button>
+            </div>
+        </div>
+
+        <!-- Últimas partidas -->
+        <div class="card perfil-historial">
+            <h2 class="subtitulo">Últimas partidas</h2>
+            {{#historial}}
+            <div class="partida-fila">
+                <span class="resultado {{#victoria}}resultado-v{{/victoria}}">{{#victoria}}V{{/victoria}}{{^victoria}}D{{/victoria}}</span>
+                <span class="partida-letras">{{letras}}</span>
+                <span class="texto-secundario">{{aciertos}} correctas</span>
+                <b class="numero">+{{puntos}}</b>
+                <small class="texto-secundario">{{fecha}}</small>
+            </div>
+            {{/historial}}
+            {{^historial}}<p class="texto-secundario">Todavía no hay partidas. <a href="{{base}}/juego">¡Jugá la primera!</a></p>{{/historial}}
+        </div>
+    </div>
+</section>
+{{/perfil}}
+
+
+
+<!-- Mapa: Leaflet (BSD) + mosaicos de OpenStreetMap -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<!-- QR: librería qrcodejs (MIT) desde CDN -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script src="{{base}}/public/js/perfil.js?v={{v}}"></script>

@@ -1,0 +1,134 @@
+<section class="juego" id="juego" data-base="{{base}}" data-categorias="{{categorias_json}}">
+
+    <!-- ═══ HUD: vidas · letras · puntos ═══ -->
+    <header class="hud">
+        <div class="hud-vidas" id="hud-vidas" aria-label="Vidas"></div>
+        <div class="hud-letras" id="hud-letras" aria-label="Letras de ZENIT"></div>
+        <div class="hud-puntos"><small>Puntos</small><b class="numero" id="hud-puntos">0</b></div>
+    </header>
+    <div class="hud-sub">
+        <div class="hud-progreso">
+            <span class="hud-pasos" id="hud-pasos"></span>
+            <span id="hud-progreso-texto">Rondas para la próxima letra</span>
+        </div>
+        <div class="hud-z" title="Probabilidad de que salga la categoría Z">
+            <span class="mini-z">Z</span><b class="numero" id="hud-z">1%</b>
+        </div>
+    </div>
+
+    <!-- ═══ Pantallas (solo una visible a la vez) ═══ -->
+    <div class="escenario">
+
+        <div class="pantalla" data-pantalla="cargando">
+            <div class="cargando"><span class="logo-punto"></span> Cargando partida…</div>
+        </div>
+
+        <!-- Ruleta estilo apertura de caja -->
+        <div class="pantalla" data-pantalla="girar">
+            <p class="sobretitulo" id="ruleta-titulo">Girá la ruleta</p>
+            <div class="ruleta" id="ruleta">
+                <div class="ruleta-marcador"></div>
+                <div class="ruleta-tira" id="ruleta-tira"></div>
+            </div>
+            <p class="ruleta-resultado" id="ruleta-resultado">&nbsp;</p>
+            <button type="button" class="btn btn-primario btn-xl" id="btn-girar">Girar</button>
+            <p class="ayuda centrado">Te tocan {{reglas.preguntas}} preguntas de la categoría: acertá al menos {{reglas.minimo}} para no perder una vida.</p>
+        </div>
+
+        <!-- Pregunta -->
+        <div class="pantalla" data-pantalla="pregunta">
+            <article class="pregunta-card" id="pregunta-card">
+                <header class="pregunta-top">
+                    <div>
+                        <span class="cat-chip" id="pregunta-categoria"></span>
+                        <p class="pregunta-ronda" id="pregunta-ronda"></p>
+                    </div>
+                    <div class="reloj" id="reloj">
+                        <svg viewBox="0 0 44 44"><circle cx="22" cy="22" r="19" class="reloj-fondo"/><circle cx="22" cy="22" r="19" class="reloj-arco" id="reloj-arco"/></svg>
+                        <b class="numero" id="reloj-numero">20</b>
+                    </div>
+                </header>
+                <div class="ronda-puntos" id="ronda-puntos"></div>
+                <h2 class="pregunta-texto" id="pregunta-texto"></h2>
+                <div class="opciones" id="opciones"></div>
+            </article>
+        </div>
+
+        <!-- Fin de partida -->
+        <div class="pantalla" data-pantalla="fin">
+            <div class="fin" id="fin">
+                <p class="sobretitulo" id="fin-sobretitulo"></p>
+                <h1 class="fin-titulo" id="fin-titulo"></h1>
+                <div class="fin-letras" id="fin-letras"></div>
+                <div class="fin-stats">
+                    <div><small>Puntos</small><b class="numero" id="fin-puntos">0</b></div>
+                    <div><small>Correctas</small><b class="numero" id="fin-correctas">0</b></div>
+                    <div><small>Letras</small><b class="numero" id="fin-cant-letras">0</b></div>
+                </div>
+                <div class="fin-botones">
+                    <button type="button" class="btn btn-primario" id="btn-nueva">Jugar de nuevo</button>
+                    <a href="{{base}}/perfil" class="btn btn-secundario">Ver perfil</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══ Modal: resultado de la ronda ═══ -->
+    <div class="modal" id="modal-ronda" hidden>
+        <div class="modal-caja">
+            <div class="modal-icono" id="ronda-icono"></div>
+            <h2 class="modal-titulo" id="ronda-titulo"></h2>
+            <p class="texto-secundario" id="ronda-detalle"></p>
+            <button type="button" class="btn btn-primario btn-bloque" id="btn-continuar">Continuar</button>
+            <button type="button" class="link-reportar" data-abrir-reporte>⚠ Reportar un problema</button>
+        </div>
+    </div>
+
+    <!-- ═══ Modal: premio (letra o corazón) ═══ -->
+    <div class="modal" id="modal-premio" hidden>
+        <div class="modal-caja modal-premio">
+            <p class="sobretitulo" id="premio-sobretitulo"></p>
+            <h2 class="modal-titulo" id="premio-titulo">Elegí tu premio</h2>
+            <div class="premio-opciones">
+                <button type="button" class="premio" data-eleccion="letra">
+                    <span class="premio-letra" id="premio-letra">Z</span>
+                    <b>Letra</b><small>Un paso más hacia ZENIT</small>
+                </button>
+                <button type="button" class="premio" data-eleccion="vida" id="premio-vida">
+                    <span class="premio-corazon">❤</span>
+                    <b>+1 vida</b><small id="premio-vida-texto">Para aguantar más</small>
+                </button>
+            </div>
+            <button type="button" class="link-reportar" data-abrir-reporte id="reporte-desde-premio">⚠ Reportar un problema</button>
+        </div>
+    </div>
+
+    <!-- ═══ Modal: reportar preguntas de la ronda que terminó ═══ -->
+    <div class="modal" id="modal-reporte" hidden>
+        <form class="modal-caja modal-reporte" id="form-reporte">
+            <p class="sobretitulo sobretitulo-peligro">⚠ Reportar un problema</p>
+            <h2 class="modal-titulo">¿Qué pregunta?</h2>
+            <p class="ayuda">Elegí una o varias preguntas de la ronda.</p>
+            <div class="reporte-preguntas" id="reporte-preguntas"></div>
+
+            <p class="reporte-etiqueta">Motivo</p>
+            <div class="reporte-motivos">
+                {{#motivos_reporte}}
+                <label class="motivo"><input type="radio" name="motivo" value="{{clave}}" required><span>{{texto}}</span></label>
+                {{/motivos_reporte}}
+            </div>
+
+            <label class="campo">
+                <span>Contanos más (opcional)</span>
+                <textarea name="detalle" id="reporte-detalle" maxlength="500" rows="3" placeholder="Ej: la respuesta correcta es otra…"></textarea>
+            </label>
+            <p class="alerta alerta-error" id="reporte-error" hidden></p>
+            <div class="editor-botones">
+                <button type="button" class="btn btn-secundario" id="reporte-cancelar">Volver</button>
+                <button type="submit" class="btn btn-primario" id="reporte-enviar">Enviar reporte</button>
+            </div>
+        </form>
+    </div>
+</section>
+
+<script src="{{base}}/public/js/juego.js?v={{v}}"></script>

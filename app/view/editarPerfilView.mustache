@@ -1,0 +1,94 @@
+<section class="editar">
+    <header class="editar-cabecera">
+        <a href="{{base}}/perfil" class="volver">← Volver al perfil</a>
+        <p class="sobretitulo">Tu cuenta</p>
+        <h1 class="titulo">Editar perfil</h1>
+    </header>
+
+    <!-- ═══ Foto: se elige un archivo y se recorta en un círculo ═══ -->
+    <div class="card editar-foto">
+        {{#yo_perfil}}
+        <div class="perfil-avatar anillo-{{nivel.color}}" id="avatar-actual">{{> partials/avatar}}</div>
+        {{/yo_perfil}}
+        <div>
+            <h2 class="subtitulo">Foto de perfil</h2>
+            <p class="texto-secundario">Elegí cualquier imagen y ajustala al círculo.</p>
+            <label class="btn btn-secundario btn-chico">
+                Cambiar foto
+                <input type="file" accept="image/jpeg,image/png,image/webp" id="foto-archivo" hidden>
+            </label>
+        </div>
+    </div>
+
+    <!-- ═══ Datos: solo el nombre completo se puede cambiar ═══ -->
+    <div class="card">
+        <h2 class="subtitulo">Datos</h2>
+        {{#form}}
+        <form method="post" action="{{base}}/perfil/guardar" class="formulario">
+            <label class="campo">
+                <span>Nombre completo</span>
+                <input type="text" name="nombre_completo" value="{{nombre_completo}}" minlength="3" maxlength="150" autocomplete="name" required>
+            </label>
+            <div class="dato-fijo"><small>Usuario</small><b>@{{nombre_usuario}}</b><span title="El usuario no se puede cambiar">🔒</span></div>
+            <div class="dato-fijo"><small>Email</small><b>{{email}}</b><span title="El email no se puede cambiar">🔒</span></div>
+
+            <button type="submit" class="btn btn-primario">Guardar cambios</button>
+        </form>
+        {{/form}}
+    </div>
+
+    <!-- ═══ Contraseña: actual + nueva → código al mail → confirmar ═══ -->
+    <div class="card" id="password">
+        <h2 class="subtitulo">Cambiar contraseña</h2>
+
+        {{^password_pendiente}}
+        <form method="post" action="{{base}}/perfil/password" class="formulario">
+            <label class="campo"><span>Contraseña actual</span>
+                <input type="password" name="password_actual" autocomplete="current-password" required></label>
+            <div class="fila-2">
+                <label class="campo"><span>Nueva</span>
+                    <input type="password" name="password_nueva" minlength="8" autocomplete="new-password" required></label>
+                <label class="campo"><span>Repetir</span>
+                    <input type="password" name="password_repetir" minlength="8" autocomplete="new-password" required></label>
+            </div>
+            <button type="submit" class="btn btn-primario">Enviarme el código</button>
+            <p class="ayuda">Para confirmar el cambio te mandamos un código a tu mail.</p>
+        </form>
+        {{/password_pendiente}}
+
+        {{#password_pendiente}}
+        <form method="post" action="{{base}}/perfil/confirmarPassword" class="formulario">
+            <p class="texto-secundario">Ingresá el código de 6 dígitos que te llegó al mail.</p>
+            {{> partials/input-codigo}}
+            <button type="submit" class="btn btn-primario">Confirmar cambio</button>
+        </form>
+        <form method="post" action="{{base}}/perfil/cancelarPassword">
+            <button type="submit" class="btn btn-secundario btn-chico btn-espaciado">Cancelar</button>
+        </form>
+        {{/password_pendiente}}
+    </div>
+</section>
+
+<!-- ═══ Editor de foto (recorte circular) ═══ -->
+<div class="modal" id="editor-foto" hidden>
+    <div class="modal-caja editor-caja">
+        <h2 class="modal-titulo">Ajustá tu foto</h2>
+        <div class="editor-area" id="editor-area">
+            <img id="editor-imagen" alt="" draggable="false">
+            <div class="editor-mascara" aria-hidden="true"></div>
+        </div>
+        <label class="editor-zoom">
+            <span aria-hidden="true">−</span>
+            <input type="range" id="editor-zoom" min="1" max="4" step="0.01" value="1" aria-label="Zoom">
+            <span aria-hidden="true">+</span>
+        </label>
+        <p class="ayuda">Arrastrá para mover · usá la barra (o la rueda) para acercar</p>
+        <p class="alerta alerta-error" id="editor-error" hidden></p>
+        <div class="editor-botones">
+            <button type="button" class="btn btn-secundario" id="editor-cancelar">Cancelar</button>
+            <button type="button" class="btn btn-primario" id="editor-guardar">Guardar foto</button>
+        </div>
+    </div>
+</div>
+
+<script src="{{base}}/public/js/editor-foto.js?v={{v}}"></script>

@@ -1,0 +1,17 @@
+{
+    "_ayuda": "Cambiá el archivo de cada sonido (mp3, wav u ogg dentro de esta carpeta). Dejalo vacío (\"\") para silenciar uno. volumen: 0 a 1.",
+    "volumen": 0.6,
+    "sonidos": {
+        "navegacion": "navegacion.wav",
+        "jugar": "jugar.wav",
+        "ruleta-tick": "ruleta-tick.wav",
+        "ruleta-fin": "ruleta-fin.wav",
+        "categoria-z": "categoria-z.wav",
+        "correcta": "correcta.wav",
+        "incorrecta": "incorrecta.wav",
+        "vida-perdida": "vida-perdida.wav",
+        "letra": "letra.wav",
+        "victoria": "victoria.wav",
+        "derrota": "derrota.wav"
+    }
+}

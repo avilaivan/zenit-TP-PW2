@@ -1,0 +1,29 @@
+<section class="editar">
+    <header class="editar-cabecera">
+        <a href="{{base}}/perfil" class="volver">← Volver al perfil</a>
+        <p class="sobretitulo sobretitulo-peligro">Zona de peligro</p>
+        <h1 class="titulo">Eliminar cuenta</h1>
+    </header>
+
+    <div class="card card-peligro">
+        <p>Se borran para siempre tu usuario, tu foto, tus estadísticas y todas tus partidas. <b>No se puede deshacer.</b></p>
+
+        {{^codigo_enviado}}
+        <p class="texto-secundario">Para confirmar te mandamos un código a <b>{{email}}</b>.</p>
+        <form method="post" action="{{base}}/perfil/solicitarEliminacion">
+            <button type="submit" class="btn btn-peligro">Enviarme el código</button>
+        </form>
+        {{/codigo_enviado}}
+
+        {{#codigo_enviado}}
+        <form method="post" action="{{base}}/perfil/confirmarEliminacion" class="formulario">
+            <p class="texto-secundario">Ingresá el código que te llegó a <b>{{email}}</b>.</p>
+            {{> partials/input-codigo}}
+            <button type="submit" class="btn btn-peligro">Eliminar mi cuenta</button>
+        </form>
+        <form method="post" action="{{base}}/perfil/solicitarEliminacion">
+            <button type="submit" class="btn btn-secundario btn-chico btn-espaciado">Reenviar código</button>
+        </form>
+        {{/codigo_enviado}}
+    </div>
+</section>

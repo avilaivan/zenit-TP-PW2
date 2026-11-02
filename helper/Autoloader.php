@@ -1,20 +1,22 @@
 <?php
+/**
+ * Autoloader del proyecto (sin Composer).
+ *
+ * - Clases con namespace (app\controller\HomeController) → la ruta
+ *   del namespace coincide con la carpeta: app/controller/HomeController.php
+ * - Clases globales (Router, Request, Url...) → viven en helper/.
+ */
+spl_autoload_register(function (string $clase): void {
+    $ruta = str_replace('\\', '/', $clase) . '.php';
 
-spl_autoload_register(function ($class) {
-    $path = str_replace('\\', '/', $class) . '.php';
-
-    // Clases con namespace (app\controller\HomeController, app\model\...):
-    // el namespace refleja la carpeta real a partir de la raíz del proyecto.
-    $file = __DIR__ . "/../$path";
-    if (file_exists($file)) {
-        require_once $file;
+    $conNamespace = __DIR__ . '/../' . $ruta;
+    if (file_exists($conNamespace)) {
+        require_once $conNamespace;
         return;
     }
 
-    // Clases globales sin namespace (MyDatabase, Router, Redirect, Request...):
-    // todas viven en helper/.
-    $file = __DIR__ . "/$path";
-    if (file_exists($file)) {
-        require_once $file;
+    $helper = __DIR__ . '/' . $ruta;
+    if (file_exists($helper)) {
+        require_once $helper;
     }
 });

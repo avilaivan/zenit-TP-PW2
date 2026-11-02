@@ -1,25 +1,41 @@
 <?php
-
-require_once __DIR__ . "/../vendor/mustache/Mustache/Autoloader.php";
-Mustache_Autoloader::register(__DIR__ . "/../vendor/mustache");
+/**
+ * Renderiza vistas Mustache dentro del layout (header + vista + footer).
+ *
+ * Los datos "globales" que necesita el layout (URL base, usuario del menú,
+ * mensaje flash) los inyecta quien construye el render (Configuration),
+ * así las vistas no dependen de la sesión directamente.
+ */
+require_once __DIR__ . '/../vendor/mustache/Mustache/Autoloader.php';
+Mustache_Autoloader::register(__DIR__ . '/../vendor/mustache');
 
 class MustacheRender
 {
-    private $mustache;
-    private $viewPath;
+    private Mustache_Engine $mustache;
 
-    public function __construct()
+    /** @var callable Devuelve los datos globales del layout. */
+    private $datosGlobales;
+
+    public function __construct(callable $datosGlobales)
     {
-        $this->viewPath = dirname(__DIR__) . "/app/view";
+        $carpetaVistas = dirname(__DIR__) . '/app/view';
         $this->mustache = new Mustache_Engine([
-            "loader" => new Mustache_Loader_FilesystemLoader($this->viewPath, ["extension" => ".mustache"])
+            'loader' => new Mustache_Loader_FilesystemLoader($carpetaVistas, ['extension' => '.mustache']),
+            'partials_loader' => new Mustache_Loader_FilesystemLoader($carpetaVistas, ['extension' => '.mustache']),
         ]);
+        $this->datosGlobales = $datosGlobales;
     }
 
-    public function renderiza($view, $data = [])
+    /**
+     * @param string $vista  nombre del archivo sin "View.mustache" (ej: "perfil")
+     * @param array  $datos  datos propios de la vista
+     */
+    public function renderiza(string $vista, array $datos = []): void
     {
-        require_once($this->viewPath . "/header.php");
-        echo $this->mustache->render($view . "View", $data);
-        require_once($this->viewPath . "/footer.php");
+        $datos = array_merge(($this->datosGlobales)(), $datos);
+
+        echo $this->mustache->render('layout/header', $datos);
+        echo $this->mustache->render($vista . 'View', $datos);
+        echo $this->mustache->render('layout/footer', $datos);
     }
 }

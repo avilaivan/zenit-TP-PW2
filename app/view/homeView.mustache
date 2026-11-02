@@ -1,66 +1,36 @@
-<div class="w3-content" style="max-width:1000px">
-
-    <div class="w3-panel card-contenido w3-padding-24
-                w3-margin-top w3-card">
-
-        <h1>¡Bienvenido/a, {{nombre_usuario}}!</h1>
-
-        <p>Este es tu espacio de juego. ¿Listo para poner a prueba tus conocimientos?</p>
-
-        <div class="w3-panel w3-light-grey w3-padding-16">
-            <h3>Mi perfil</h3>
-
-            <p>
-                <b>Nombre de usuario:</b>
-                {{nombre_usuario}}
-            </p>
-
-            <p>
-                <b>Email:</b>
-                {{email}}
-            </p>
-
-            <p>
-                <b>Puntaje:</b>
-                {{puntaje}} puntos
-            </p>
+<section class="lobby">
+    {{#jugador}}
+    <header class="lobby-cabecera">
+        <p class="sobretitulo">Lobby</p>
+        <h1 class="titulo">Hola, {{nombre_usuario}}</h1>
+        <div class="lobby-datos">
+            <span class="dato-chip">{{#nivel}}{{> partials/nivel}}{{/nivel}} Nivel</span>
+            <span class="dato-chip"><b class="numero">{{elo}}</b> elo</span>
         </div>
+    </header>
+    {{/jugador}}
 
-        <h2>¿Qué querés hacer?</h2>
+    {{#visitante}}
+    <header class="lobby-cabecera">
+        <p class="sobretitulo">Trivia de 8 categorías</p>
+        <h1 class="titulo">Llegá a tu zenit</h1>
+        <p class="lobby-bajada">Tocá <b>JUGAR</b>, respondé contra el reloj y juntá las letras Z·E·N·I·T.</p>
+    </header>
+    {{/visitante}}
 
-        <div class="w3-row-padding">
-
-            <div class="w3-half w3-margin-bottom">
-                <div class="w3-card w3-padding-16">
-                    <h3>Jugar</h3>
-                    <p>Respondé preguntas y sumá puntos.</p>
-                    <button class="w3-button btn-cancha w3-round"
-                            disabled>
-                        Próximamente
-                    </button>
-                </div>
-            </div>
-
-            <div class="w3-half w3-margin-bottom">
-                <div class="w3-card w3-padding-16">
-                    <h3>Ranking</h3>
-                    <p>Descubrí quiénes tienen los mejores puntajes.</p>
-                    <button class="w3-button btn-cancha w3-round"
-                            disabled>
-                        Próximamente
-                    </button>
-                </div>
-            </div>
-
-        </div>
-
-        <form method="post" action="/login/logout">
-            <button type="submit"
-                    class="w3-button w3-border w3-round w3-margin-top">
-                Cerrar sesión
-            </button>
-        </form>
-
+    <!-- Botón JUGAR con anillos -->
+    <div class="jugar-escena">
+        <div class="anillo anillo-externo"></div>
+        <div class="anillo anillo-interno"></div>
+        <a href="{{base}}/juego" class="boton-jugar">
+            <span>{{#partida_en_curso}}Seguir{{/partida_en_curso}}{{^partida_en_curso}}Jugar{{/partida_en_curso}}</span>
+        </a>
     </div>
 
-</div>
+    <ul class="lobby-reglas">
+        <li><b>❤ 3 vidas</b><span>Si fallás 2 de 3 en una categoría, perdés una.</span></li>
+        <li><b>3 rondas = 1 letra</b><span>Superá 3 categorías y acertá 2 de 3 para ganar una letra o un corazón.</span></li>
+        <li><b class="texto-z">Categoría Z</b><span>Muy rara: te salta directo al premio.</span></li>
+        <li><b>Z·E·N·I·T</b><span>Juntá las 5 letras y ganás la partida.</span></li>
+    </ul>
+</section>

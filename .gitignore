@@ -1,0 +1,21 @@
+# Configuración local con contraseñas (usar config/config.example.ini como modelo)
+config/config.ini
+
+# Logs y mails de prueba
+log/*
+!log/.gitkeep
+
+# Fotos que suben los usuarios
+public/uploads/perfiles/*
+!public/uploads/perfiles/.gitkeep
+
+# Archivos temporales de reinicio de la base
+public/data/reinicio.*
+
+# IDE (PhpStorm guarda acá rutas y conexiones de tu PC)
+.idea/
+
+# Sistema
+.DS_Store
+Thumbs.db
+desktop.ini

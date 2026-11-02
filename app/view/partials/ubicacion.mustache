@@ -1,0 +1,26 @@
+<!--
+    Selector de ubicación (registro y editar perfil):
+    mapa para tocar + país y ciudad con sugerencias mientras se escribe.
+    Lógica en public/js/ubicacion.js
+-->
+<div class="ubicacion" data-ubicacion>
+    <div class="campo">
+        <span>País y ciudad — tocá en el mapa o escribí</span>
+        <div class="mapa" data-mapa></div>
+    </div>
+    <div class="fila-2">
+        <label class="campo autocompletar">
+            <span>País</span>
+            <input type="text" name="pais" value="{{pais}}" maxlength="80" autocomplete="off" required data-pais>
+            <ul class="sugerencias" role="listbox" hidden></ul>
+        </label>
+        <label class="campo autocompletar">
+            <span>Ciudad</span>
+            <input type="text" name="ciudad" value="{{ciudad}}" maxlength="80" autocomplete="off" required data-ciudad>
+            <ul class="sugerencias" role="listbox" hidden></ul>
+        </label>
+    </div>
+    <input type="hidden" name="latitud" value="{{latitud}}" data-lat>
+    <input type="hidden" name="longitud" value="{{longitud}}" data-lon>
+    <p class="ayuda" data-estado aria-live="polite"></p>
+</div>

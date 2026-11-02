@@ -1,55 +1,55 @@
 <?php
-
+/**
+ * Acceso a MySQL con PDO.
+ *
+ * Todas las consultas son PREPARADAS (los valores van como parámetros "?"),
+ * así no hay riesgo de SQL injection.
+ */
 class MyDatabase
 {
-    private $conexion;
+    private PDO $conexion;
 
-    public function __construct($host, $user, $pass, $db)
+    public function __construct(string $host, string $usuario, string $clave, string $base)
     {
-        $this->conexion = new PDO("mysql:host=$host;dbname=$db", $user, $pass);
+        $this->conexion = new PDO(
+            "mysql:host=$host;dbname=$base;charset=utf8mb4",
+            $usuario,
+            $clave,
+            [
+                PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+                PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+            ]
+        );
     }
 
-    public function queryOne(string $sql)
+    /** Devuelve una fila o null. */
+    public function queryOne(string $sql, array $parametros = []): ?array
     {
-        Log::info($sql);
-        $resultado = $this->conexion->query($sql, PDO::FETCH_ASSOC);
-        $fila = $resultado->fetch();
+        $fila = $this->preparar($sql, $parametros)->fetch();
         return $fila === false ? null : $fila;
     }
 
-    public function queryAll(string $sql)
+    /** Devuelve todas las filas. */
+    public function queryAll(string $sql, array $parametros = []): array
     {
-        Log::info($sql);
-        $resultado = $this->conexion->query($sql, PDO::FETCH_ASSOC);
-        return $resultado->fetchAll();
+        return $this->preparar($sql, $parametros)->fetchAll();
     }
 
-    public function execute(string $sql)
+    /** INSERT / UPDATE / DELETE. Devuelve las filas afectadas. */
+    public function execute(string $sql, array $parametros = []): int
     {
-        Log::info($sql);
-        return $this->conexion->exec($sql);
+        return $this->preparar($sql, $parametros)->rowCount();
     }
 
-    public function lastInsertId()
+    public function lastInsertId(): int
     {
-        return $this->conexion->lastInsertId();
+        return (int) $this->conexion->lastInsertId();
     }
 
-
-    public function queryOnePrepared(string $sql, array $params)
+    private function preparar(string $sql, array $parametros): PDOStatement
     {
-        $statement = $this->conexion->prepare($sql);
-        $statement->execute($params);
-
-        $fila = $statement->fetch(PDO::FETCH_ASSOC);
-
-        return $fila === false ? null : $fila;
+        $sentencia = $this->conexion->prepare($sql);
+        $sentencia->execute($parametros);
+        return $sentencia;
     }
-
-    public function executePrepared(string $sql, array $params)
-    {
-        $statement = $this->conexion->prepare($sql);
-        return $statement->execute($params);
-    }
-
 }

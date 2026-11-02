@@ -1,66 +1,26 @@
+<section class="auth">
+    {{> partials/auth-marca}}
 
-<div class="w3-content" style="max-width:600px">
-    <div class="w3-panel card-contenido w3-padding-24
-                w3-margin-top w3-card">
+    <div class="auth-panel">
+        <div class="card auth-card">
+            <p class="sobretitulo">Bienvenido de vuelta</p>
+            <h1 class="titulo">Iniciar sesión</h1>
 
-        <h2>Juego de preguntas y respuestas</h2>
+            {{#error}}<p class="alerta alerta-error">{{error}}</p>{{/error}}
 
-        {{#login_error}}
-            <p class="w3-panel w3-pale-red w3-padding">
-                El email o la contraseña son incorrectos.
-                Intentá nuevamente.
-            </p>
-        {{/login_error}}
+            <form method="post" action="{{base}}/login/login" class="formulario">
+                <label class="campo">
+                    <span>Usuario o email</span>
+                    <input type="text" name="usuario" value="{{usuario}}" autocomplete="username" required autofocus>
+                </label>
+                <label class="campo">
+                    <span>Contraseña</span>
+                    <input type="password" name="password" autocomplete="current-password" required>
+                </label>
+                <button type="submit" class="btn btn-primario btn-bloque">Entrar</button>
+            </form>
 
-        <h3>Iniciar sesión</h3>
-
-        {{#registro_exitoso}}
-            <p class="w3-panel w3-pale-green w3-padding">
-                ¡Tu cuenta fue creada correctamente!
-                Ahora podés iniciar sesión.
-            </p>
-        {{/registro_exitoso}}
-
-        <form method="post" action="/login/login">
-
-            <div class="w3-section">
-                <label for="email"><b>Email</b></label>
-
-                <input
-                        class="w3-input w3-border"
-                        type="email"
-                        id="email"
-                        name="email"
-                        placeholder="Ingresá tu email"
-                        required
-                >
-            </div>
-
-            <div class="w3-section">
-                <label for="password"><b>Contraseña</b></label>
-
-                <input
-                        class="w3-input w3-border"
-                        type="password"
-                        id="password"
-                        name="password"
-                        placeholder="Ingresá tu contraseña"
-                        required
-                >
-            </div>
-
-            <button
-                    type="submit"
-                    class="w3-button btn-cancha w3-round
-                       w3-margin-top w3-padding-16"
-            >
-                Ingresar
-            </button>
-
-        </form>
-
-        <p>¿Todavía no tenés cuenta?</p>
-        <a href="/registro/show">Registrarme</a>
-
+            <p class="auth-pie">¿Todavía no tenés cuenta? <a href="{{base}}/registro">Registrate</a></p>
+        </div>
     </div>
-</div>
+</section>
