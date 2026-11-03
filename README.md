@@ -12,7 +12,7 @@ PHP + MySQL con MVC propio (sin frameworks) y vistas Mustache. Responsive: la mi
 | Perfil estilo Steam: foto, ubicación con mapa, nivel **1 → Z**, elo, % por categoría, QR | ZENIT+ |
 | Menú ⋮: editar perfil (nombre completo y foto con recorte circular; usuario y email no se cambian), contraseña con código al mail, cerrar sesión, eliminar cuenta con código al mail | Juego online entre jugadores |
 | Juego **individual (offline)**: ruleta, vidas, letras Z·E·N·I·T, categoría Z | Trampitas |
-| 8 categorías × 10 preguntas (**6 opciones**, por tiempo) | |
+| 8 categorías × 40 preguntas = **320** (6 opciones, por tiempo) | |
 
 ## Cómo se juega
 
@@ -65,6 +65,10 @@ Cada `git push` a `main` sube la web a InfinityFree por FTP (`.github/workflows/
 1. En GitHub → **Settings → Secrets and variables → Actions** cargá `FTP_SERVER` (`ftpupload.net`), `FTP_USERNAME` (`if0_…`) y `FTP_PASSWORD` (contraseña de la cuenta de hosting).
 2. En InfinityFree creá una base MySQL, entrá con su phpMyAdmin y importá `app/sql/zenit.sql`.
 3. Con el File Manager creá `htdocs/config/config.ini` (copiá `config.example.ini`) con los datos de esa base. Ese archivo nunca se sube desde GitHub.
+
+### Sumar preguntas sin borrar cuentas
+
+`app/sql/preguntas_extra.sql` agrega solo las preguntas nuevas a una base que ya funciona (XAMPP o InfinityFree): phpMyAdmin → entrá a la base → **Importar**. No borra cuentas ni partidas, y si se importa dos veces no duplica nada. `zenit.sql` ya las trae para una instalación desde cero.
 
 ## Estructura
 

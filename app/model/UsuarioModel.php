@@ -40,7 +40,7 @@ class UsuarioModel
         return $this->db->queryOne('SELECT id FROM usuario WHERE email = ?', [$email]) !== null;
     }
 
-    /** @param int|null $excepto id a ignorar (el propio usuario al editar su perfil) */
+    /** El nombre de usuario es único: se controla al registrarse. */
     public function existeNombreUsuario(string $nombreUsuario): bool
     {
         return $this->db->queryOne('SELECT id FROM usuario WHERE nombre_usuario = ?', [$nombreUsuario]) !== null;
@@ -103,7 +103,6 @@ class UsuarioModel
 
     // ── Perfil ────────────────────────────────────────
 
-    /** Datos editables desde "Editar perfil" (el email nunca cambia). */
     /** Lo único editable del perfil (además de foto y contraseña): usuario y email son fijos. */
     public function actualizarNombreCompleto(int $id, string $nombreCompleto): void
     {

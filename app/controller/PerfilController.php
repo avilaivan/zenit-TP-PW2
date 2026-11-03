@@ -77,7 +77,7 @@ class PerfilController
     }
 
     // ════════════════════════════════════════════════
-    //  Editar perfil: usuario, ubicación y foto
+    //  Editar perfil: nombre completo, foto y contraseña
     // ════════════════════════════════════════════════
 
     public function editar(): void
