@@ -12,6 +12,7 @@ use app\model\CategoriaModel;
 use app\model\EstadisticaModel;
 use app\model\PartidaModel;
 use app\model\PreguntaModel;
+use app\model\PreguntaVistaModel;
 use app\model\ReporteModel;
 use app\model\UsuarioModel;
 use app\service\CorreoService;
@@ -121,7 +122,7 @@ class Configuration
     {
         return new JuegoService(new EstadoJuego(), new RuletaService(), $this->getCategoriaModel(),
             new PreguntaModel($this->getDatabase()), $this->getEstadisticaModel(),
-            new PartidaModel($this->getDatabase()));
+            new PartidaModel($this->getDatabase()), new PreguntaVistaModel($this->getDatabase()));
     }
 
     private function getPerfilService(): PerfilService

@@ -8,7 +8,7 @@
 
 
 SET FOREIGN_KEY_CHECKS = 0;
-DROP TABLE IF EXISTS reporte, partida, usuario_categoria, opcion, pregunta, categoria, usuario;
+DROP TABLE IF EXISTS pregunta_vista, reporte, partida, usuario_categoria, opcion, pregunta, categoria, usuario;
 SET FOREIGN_KEY_CHECKS = 1;
 
 -- ── Usuarios ────────────────────────────────────────────────
@@ -42,7 +42,7 @@ CREATE TABLE usuario (
     partidas_jugadas     INT NOT NULL DEFAULT 0,
     partidas_ganadas     INT NOT NULL DEFAULT 0,
     creado               TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ── Categorías y preguntas ──────────────────────────────────
 CREATE TABLE categoria (
@@ -52,7 +52,7 @@ CREATE TABLE categoria (
     emoji       VARCHAR(8)   NOT NULL,
     color       CHAR(7)      NOT NULL,
     descripcion VARCHAR(120) NOT NULL
-) ENGINE=InnoDB;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE pregunta (
     id           INT AUTO_INCREMENT PRIMARY KEY,
@@ -60,7 +60,7 @@ CREATE TABLE pregunta (
     enunciado    VARCHAR(255) NOT NULL,
     activa       TINYINT(1) NOT NULL DEFAULT 1,
     FOREIGN KEY (categoria_id) REFERENCES categoria(id)
-) ENGINE=InnoDB;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE opcion (
     id          INT AUTO_INCREMENT PRIMARY KEY,
@@ -68,7 +68,7 @@ CREATE TABLE opcion (
     texto       VARCHAR(150) NOT NULL,
     es_correcta TINYINT(1) NOT NULL DEFAULT 0,
     FOREIGN KEY (pregunta_id) REFERENCES pregunta(id) ON DELETE CASCADE
-) ENGINE=InnoDB;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ── Estadística por categoría (para el % de acierto del perfil) ──
 CREATE TABLE usuario_categoria (
@@ -79,7 +79,7 @@ CREATE TABLE usuario_categoria (
     PRIMARY KEY (usuario_id, categoria_id),
     FOREIGN KEY (usuario_id)   REFERENCES usuario(id) ON DELETE CASCADE,
     FOREIGN KEY (categoria_id) REFERENCES categoria(id)
-) ENGINE=InnoDB;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ── Partidas individuales (modo offline) ────────────────────
 CREATE TABLE partida (
@@ -93,7 +93,20 @@ CREATE TABLE partida (
     creada      TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     terminada   DATETIME NULL,
     FOREIGN KEY (usuario_id) REFERENCES usuario(id) ON DELETE CASCADE
-) ENGINE=InnoDB;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- ── Preguntas ya vistas por cada jugador (para no repetirlas) ──
+-- Un jugador no vuelve a ver una pregunta de una categoría hasta haber visto
+-- todas las demás de esa categoría; ahí se reinicia su historial de esa categoría.
+CREATE TABLE IF NOT EXISTS pregunta_vista (
+    usuario_id  INT NOT NULL,
+    pregunta_id INT NOT NULL,
+    orden       BIGINT NOT NULL DEFAULT 0,          -- crece con cada pregunta vista (ms)
+    vista       TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (usuario_id, pregunta_id),
+    FOREIGN KEY (usuario_id)  REFERENCES usuario(id)  ON DELETE CASCADE,
+    FOREIGN KEY (pregunta_id) REFERENCES pregunta(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ── Reportes de preguntas (se hacen al terminar una ronda) ──
 -- Los revisará el editor/administrador en el panel (próxima entrega).
@@ -107,7 +120,7 @@ CREATE TABLE reporte (
     creado      TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (pregunta_id) REFERENCES pregunta(id) ON DELETE CASCADE,
     FOREIGN KEY (usuario_id)  REFERENCES usuario(id) ON DELETE CASCADE
-) ENGINE=InnoDB;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ── Datos: categorías ───────────────────────────────────────
 INSERT INTO categoria (id, slug, nombre, emoji, color, descripcion) VALUES
@@ -781,4 +794,4 @@ INSERT INTO opcion (pregunta_id, texto, es_correcta) VALUES (320, 'MySQL', 1), (
 -- ── Usuario de prueba (ya verificado) ───────────────────────
 -- usuario: demo   ·   contraseña: zenit1234
 INSERT INTO usuario (nombre_completo, nombre_usuario, email, password, anio_nacimiento, sexo, pais, ciudad, activo)
-VALUES ('Jugador Demo', 'demo', 'demo@zenit.local', '$2y$10$MqZVbmKGxE6/cEGhoNklv.p.1t8z99h7TlOBLfXtFZI/ia44stBCu', 2000, 'no_informa', 'Argentina', 'Buenos Aires', 1);
+VALUES ('Jugador Demo', 'demo', 'demo@zenit.local', '$2y$10$g8lRd87zRRXBJgstGwq7U.88YuMblrm.0Y6QvCqRa1f/ZMvLA/Zre', 2000, 'no_informa', 'Argentina', 'Buenos Aires', 1);

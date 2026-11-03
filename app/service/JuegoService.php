@@ -6,6 +6,7 @@ use app\model\CategoriaModel;
 use app\model\EstadisticaModel;
 use app\model\PartidaModel;
 use app\model\PreguntaModel;
+use app\model\PreguntaVistaModel;
 use DomainException;
 
 /**
@@ -22,6 +23,7 @@ use DomainException;
  *   FIN ──► sin vidas (derrota) o con las 5 letras Z-E-N-I-T (victoria)
  *
  * Las categorías nunca se eliminan del sorteo.
+ * Las preguntas no se repiten para un jugador hasta que vio todas las de esa categoría.
  */
 class JuegoService
 {
@@ -32,13 +34,17 @@ class JuegoService
 
     private const LETRAS_OPCION = ['A', 'B', 'C', 'D', 'E', 'F'];
 
+    /** Al empezar un ciclo nuevo de una categoría, las últimas N vistas siguen bloqueadas. */
+    private const RECIENTES_SIN_REPETIR = 12;
+
     public function __construct(
         private EstadoJuego $almacen,
         private RuletaService $ruleta,
         private CategoriaModel $categorias,
         private PreguntaModel $preguntas,
         private EstadisticaModel $estadisticas,
-        private PartidaModel $partidas
+        private PartidaModel $partidas,
+        private PreguntaVistaModel $vistas
     ) {
     }
 
@@ -294,23 +300,42 @@ class JuegoService
         return $lista;
     }
 
-    /** Elige preguntas no vistas en esta partida (si se agotan, se reinicia esa categoría). */
+    /**
+     * Elige preguntas que el jugador NO vio todavía, ni en esta partida ni en las anteriores.
+     *
+     * Ejemplo con 40 preguntas de Historia: las primeras 40 que le toquen al jugador son
+     * todas distintas. Recién cuando las vio todas, su historial de Historia se reinicia
+     * y vuelven a salir (en otro orden). Dentro de una misma partida nunca se repiten.
+     */
     private function elegirPreguntas(array &$estado, int $categoriaId, int $cantidad): array
     {
+        $usuarioId = $estado['usuario_id'];
         $todas = $this->preguntas->idsPorCategoria($categoriaId);
-        $disponibles = array_values(array_diff($todas, $estado['vistas']));
+        $yaVistas = array_merge($estado['vistas'], $this->vistas->deCategoria($usuarioId, $categoriaId));
+        $disponibles = array_values(array_diff($todas, $yaVistas));
 
-        if (count($disponibles) < $cantidad) {
-            $estado['vistas'] = array_values(array_diff($estado['vistas'], $todas));
-            $disponibles = $todas;
-        }
         shuffle($disponibles);
         $elegidas = array_slice($disponibles, 0, $cantidad);
+
+        if (count($elegidas) < $cantidad) {
+            // Ya vio (casi) todas las de esta categoría: se usan primero las que le
+            // quedaban sin ver y se completa con un ciclo nuevo (sin repetir las de esta partida).
+            $recientes = $this->vistas->reiniciarCategoria($usuarioId, $categoriaId, self::RECIENTES_SIN_REPETIR);
+            $resto = array_values(array_diff($todas, $estado['vistas'], $elegidas, $recientes));
+            if (count($elegidas) + count($resto) < $cantidad) {
+                // Partida muy larga: ya salieron todas en esta misma partida.
+                $estado['vistas'] = array_values(array_diff($estado['vistas'], $todas));
+                $resto = array_values(array_diff($todas, $elegidas));
+            }
+            shuffle($resto);
+            $elegidas = array_merge($elegidas, array_slice($resto, 0, $cantidad - count($elegidas)));
+        }
         if ($elegidas === []) {
             throw new DomainException('No hay preguntas cargadas para esta categoría.');
         }
 
         $estado['vistas'] = array_merge($estado['vistas'], $elegidas);
+        $this->vistas->marcar($usuarioId, $elegidas);
         return $elegidas;
     }
 

@@ -70,6 +70,8 @@ Cada `git push` a `main` sube la web a InfinityFree por FTP (`.github/workflows/
 
 `app/sql/preguntas_extra.sql` agrega solo las preguntas nuevas a una base que ya funciona (XAMPP o InfinityFree): phpMyAdmin → entrá a la base → **Importar**. No borra cuentas ni partidas, y si se importa dos veces no duplica nada. `zenit.sql` ya las trae para una instalación desde cero.
 
+`app/sql/historial_preguntas.sql` crea la tabla `pregunta_vista`: guarda qué preguntas vio cada jugador para que no se le repitan hasta haber visto todas las de esa categoría. Importala **antes** de subir el código que la usa.
+
 ## Estructura
 
 ```

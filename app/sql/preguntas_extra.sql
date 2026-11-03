@@ -7,6 +7,38 @@
 -- (Para una instalación desde cero usá zenit.sql, que ya las trae).
 -- ════════════════════════════════════════════════════════════
 
+-- ── 1. Tablas en utf8mb4 (acentos, símbolos y emojis) ──
+SET FOREIGN_KEY_CHECKS = 0;
+ALTER TABLE usuario CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+ALTER TABLE categoria CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+ALTER TABLE pregunta CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+ALTER TABLE opcion CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+ALTER TABLE usuario_categoria CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+ALTER TABLE partida CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+ALTER TABLE reporte CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+SET FOREIGN_KEY_CHECKS = 1;
+
+-- ── 2. Arreglar textos que se guardaron con "?" ──
+UPDATE categoria SET emoji = '⏳' WHERE id = 1;
+UPDATE categoria SET emoji = '🌍' WHERE id = 2;
+UPDATE categoria SET emoji = '🧪' WHERE id = 3;
+UPDATE categoria SET emoji = '⚽' WHERE id = 4;
+UPDATE categoria SET emoji = '🎨' WHERE id = 5;
+UPDATE categoria SET emoji = '🎬' WHERE id = 6;
+UPDATE categoria SET emoji = '➗' WHERE id = 7;
+UPDATE categoria SET emoji = '💻' WHERE id = 8;
+UPDATE opcion SET texto = 'H₂O' WHERE texto = 'H?O';
+UPDATE opcion SET texto = 'CO₂' WHERE texto = 'CO?';
+UPDATE opcion SET texto = 'O₂' WHERE texto = 'O?';
+UPDATE opcion SET texto = 'H₂O₂' WHERE texto = 'H?O?';
+UPDATE opcion SET texto = 'HO₂' WHERE texto = 'HO?';
+UPDATE pregunta SET enunciado = '¿Cuál es el valor aproximado de π (pi)?' WHERE enunciado = '¿Cuál es el valor aproximado de ? (pi)?';
+UPDATE pregunta SET enunciado = '¿Cuánto es 15 − 3 × 4?' WHERE enunciado = '¿Cuánto es 15 ? 3 × 4?';
+UPDATE pregunta SET enunciado = '¿Qué número sigue en la serie 2, 4, 8, 16, …?' WHERE enunciado = '¿Qué número sigue en la serie 2, 4, 8, 16, ??';
+UPDATE pregunta SET enunciado = '¿Qué número sigue en la serie de Fibonacci 1, 1, 2, 3, 5, 8, …?' WHERE enunciado = '¿Qué número sigue en la serie de Fibonacci 1, 1, 2, 3, 5, 8, ??';
+UPDATE pregunta SET enunciado = 'Si x − 7 = 15, ¿cuánto vale x?' WHERE enunciado = 'Si x ? 7 = 15, ¿cuánto vale x?';
+
+-- ── 3. Preguntas nuevas ──
 
 -- Historia
 INSERT INTO pregunta (categoria_id, enunciado) SELECT 1, '¿En qué año comenzó la Primera Guerra Mundial?' FROM DUAL WHERE NOT EXISTS (SELECT 1 FROM pregunta WHERE enunciado = '¿En qué año comenzó la Primera Guerra Mundial?');
